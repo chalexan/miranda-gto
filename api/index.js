@@ -1,9 +1,7 @@
 const express = require('express')
 const kill = require('kill-port')
 const app = express()
-const port = 5050
-
-kill(port, 'tcp');
+const port = 7000
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
