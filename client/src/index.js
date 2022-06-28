@@ -15,6 +15,7 @@ root.render(
     <Routes>
       <Route path="/" element={<LayoutPage page="devicetable" />} />
       <Route path="/partner" element={<LayoutPage page="partner" />} />
+      <Route path="/partner/:id" element={<LayoutPage page="partnercard" />} />
       <Route path="/device/table" element={<LayoutPage page="devicetable" />} />
       <Route path="/device/search" element={<LayoutPage page="devicesearch" />} />
       <Route path="/login" element={<LayoutPage page="login" />} />

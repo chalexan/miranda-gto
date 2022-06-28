@@ -11,6 +11,7 @@ import SignInPage from "./signinPage";
 import DeviceTable from "./deviceTable";
 import DeviceSearch from "./deviceSearch";
 import Partner from "./partner";
+import PartnerCard from "./partnerCard";
 const { Header, Content, Footer, Sider } = Layout;
 
 const LayoutPage = (props) => (
@@ -96,6 +97,7 @@ const LayoutPage = (props) => (
           {props.page === "devicetable" ? <DeviceTable /> : null}
           {props.page === "devicesearch" ? <DeviceSearch /> : null}
           {props.page === "partner" ? <Partner /> : null}
+          {props.page === "partnercard" ? <PartnerCard /> : null}
         </div>
       </Content>
       <Footer
