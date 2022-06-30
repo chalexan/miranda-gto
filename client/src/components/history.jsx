@@ -1,6 +1,6 @@
 import { Breadcrumb, Card, Table } from "antd";
 import { Link } from "react-router-dom";
-const DeviceSearch = () => {
+const History = () => {
   return (
     <>
       <Breadcrumb>
@@ -9,12 +9,12 @@ const DeviceSearch = () => {
         <Breadcrumb.Item>
           <Link to="/device/table">Склад</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Поиск оборудования</Breadcrumb.Item>
+        <Breadcrumb.Item>История</Breadcrumb.Item>
       </Breadcrumb>
       <br />
-      <Card title="Поиск оборудования"></Card>
+      <Card title="История действий"></Card>
     </>
   );
 };
 
-export default DeviceSearch;
+export default History;

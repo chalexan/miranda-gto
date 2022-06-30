@@ -1,13 +1,33 @@
-import { Breadcrumb, Card } from "antd";
+import { Breadcrumb, Card, message } from "antd";
 import { Button, Checkbox, Form, Input } from "antd";
+import { loginReq } from "../lib/apiReq";
 
 const SignInPage = () => {
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("Success:", values);
+    const { code, data } = await tryAuth(values);
+
+    if (code !== 3) {
+      sessionStorage.removeItem("isLogin");
+      message.error(data && `Ошибка доступа: ${data}`);
+    } else {
+      await message.success(data && `Доступ предоставлен: ${data.login}`);
+      await message.info("Открываем систему. Переадресация.");
+      sessionStorage.setItem("isLogin", true);
+      sessionStorage.setItem("login", data.login);
+      window.location = "/";
+    }
+    return 0;
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+  };
+
+  const tryAuth = async (values) => {
+    const result = await loginReq(values);
+    console.log("tryAuthResult->", result);
+    return result;
   };
 
   return (

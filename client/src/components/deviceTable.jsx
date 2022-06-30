@@ -7,12 +7,14 @@ import {
   Button,
   Input,
   Space,
+  message,
 } from "antd";
 import { PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import { copy } from "copy-to-clipboard";
-import { getDevices } from "../lib/apiReq";
+import { getDevices, removeDeviceById } from "../lib/apiReq";
 const DeviceTable = () => {
   const { Option } = Select;
   const [devices, setDevices] = useState([]);
@@ -167,18 +169,28 @@ const DeviceTable = () => {
         <>
           <a
             onClick={() => {
-              //
+              localStorage.setItem("idDevice", record._id);
+              localStorage.setItem("nameDevice", record.name);
+              localStorage.setItem("nomposDevice", record.nompos);
+              localStorage.setItem("providerDevice", record.provider);
+              localStorage.setItem("meterDevice", record.meter);
+              localStorage.setItem("countDevice", record.count);
+              localStorage.setItem("molDevice", record.mol);
+              localStorage.setItem("costDevice", record.cost);
+              localStorage.setItem("categoryDevice", record.category);
+              localStorage.setItem("descriptionDevice", record.description);
             }}
           >
-            Подробнее
+            <Link to={`/device/${record._id}`}>Редактировать</Link>
           </a>
           <br />
           <a
             onClick={() => {
-              //
+              removeOneDevice(record._id);
+              window.location.reload();
             }}
           >
-            Редактирвать
+            Удалить
           </a>
         </>
       ),
@@ -197,6 +209,21 @@ const DeviceTable = () => {
     }
     setLoading(false);
   };
+
+  const removeOneDevice = async (id) => {
+    const result = await removeDeviceById(id);
+    if (result.code == 3) {
+      console.log("Delete success: ", result);
+      message.info("Удаление успешно проведено");
+    } else {
+      console.log("Error: ", result.data);
+      message.info(`Ошибка удаления: ${result.data}`);
+    }
+  };
+
+  useEffect(() => {
+    getDevicesList();
+  }, []);
 
   return (
     <>
@@ -241,6 +268,8 @@ const DeviceTable = () => {
           </Button>
         </div>
         <Divider />
+        <b>Всего номенклатур: {devices && devices.length}</b>
+        <br />
         <Table columns={columns} dataSource={devices} />
       </Card>
     </>

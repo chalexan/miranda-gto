@@ -1,15 +1,13 @@
 const express = require('express')
 const { nanoid } = require("nanoid");
-const kill = require('kill-port')
-const createError = require('http-errors');
 const path = require('path');
-const MongoStore = require('connect-mongo');
+const md5 = require('md5')
 const cors = require('cors');
 const Partner = require("./models/partner");
 const Device = require("./models/device")
+const User = require("./models/user")
 
-
-const { connect, dbPath } = require('./connectDb');
+const { connect } = require('./connectDb');
 
 const port = 8080;
 const app = express()
@@ -26,8 +24,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
+app.post('/login', async (req, res) => {
+    console.log('Incoming POST ./login ->', req.body)
+    let {
+        username,
+        password,
+    } = req.body;
+    try {
+        let user = await User.findOne({
+            login: username
+        });
+        console.log(await User.find(), user)
+        if (!user) return res.status(401).send("Unautorized")
+        if (md5(password) !== user.password) return res.status(401).send("Unautorized")
+        console.log(" User autorized! ->", user);
+        res.json({ login: username });
+    } catch (e) {
+        console.log('Error with DB:', e);
+        res.send(`Error with  DB: ${e}`);
+    }
 })
 
 // Тест добавления поставщика ->
@@ -113,8 +128,47 @@ app.get('/devices', async (req, res) => {
 
     try {
         let device = await Device.find();
-        console.log(" All devices ->", device);
+        console.log(" All devices /GET");
         res.json(device);
+    } catch (e) {
+        console.log('Error read from DB:', e);
+        res.send(`Error read from DB: ${e}`);
+    }
+})
+
+// Тест удаления одного устройства ->
+app.delete('/device', async (req, res) => {
+    let { _id } = req.body;
+    console.log('Incoming DELETE ./partner', req.body)
+    try {
+        let device = await Device.findOneAndDelete({ _id });
+        console.log(" Remove device ->", device);
+        res.json(device);
+    } catch (e) {
+        console.log('Error read from DB:', e);
+        res.send(`Error read from DB: ${e}`);
+    }
+})
+
+// Тест редактирования одного устройства ->
+app.patch('/devices', async (req, res) => {
+    let currentDevice = req.body;
+    console.log('Incoming PATCH ./devices', currentDevice)
+    try {
+        const doc = await Device.findById(currentDevice._id);
+        console.log(doc);
+        doc.name = currentDevice.name;
+        doc.nompos = currentDevice.nompos;
+        doc.provider = currentDevice.provider;
+        doc.meter = currentDevice.meter;
+        doc.count = currentDevice.count;
+        doc.mol = currentDevice.mol;
+        doc.cost = currentDevice.cost;
+        doc.category = currentDevice.category;
+        doc.description = currentDevice.description;
+        await doc.save();
+        console.log("Save device ->", currentDevice);
+        res.json(currentDevice);
     } catch (e) {
         console.log('Error read from DB:', e);
         res.send(`Error read from DB: ${e}`);

@@ -4,14 +4,15 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Space, Divider } from "antd";
+import { Layout, Menu, Avatar, Divider } from "antd";
 import { Link } from "react-router-dom";
 import React from "react";
 import SignInPage from "./signinPage";
 import DeviceTable from "./deviceTable";
-import DeviceSearch from "./deviceSearch";
+import History from "./history";
 import Partner from "./partner";
 import PartnerCard from "./partnerCard";
+import DeviceCard from "./deviceCard";
 const { Header, Content, Footer, Sider } = Layout;
 
 const LayoutPage = (props) => (
@@ -36,7 +37,6 @@ const LayoutPage = (props) => (
           style={{ height: "70px" }}
         />
       </p>
-
       <Menu
         theme="light"
         mode="inline"
@@ -47,7 +47,7 @@ const LayoutPage = (props) => (
           <Link to="/device/table">Склад</Link>
         </Menu.Item>
         <Menu.Item key={1}>
-          <Link to="/device/search"> Поиск оборудования</Link>
+          <Link to="/history"> История</Link>
         </Menu.Item>
         <Menu.Item key={3}>
           <Link to="/partner">Контакты</Link>
@@ -74,9 +74,31 @@ const LayoutPage = (props) => (
             <b>Группа технического обеспечения</b>
           </span>
           <span style={{ marginRight: "10px" }}>
-            <Link to="/login">
-              <UserSwitchOutlined style={{ color: "orange" }} /> Войти
-            </Link>
+            {!sessionStorage.getItem("isLogin") ? (
+              <Link to="/login">
+                <UserSwitchOutlined style={{ color: "orange" }} /> Войти
+              </Link>
+            ) : (
+              <>
+                <Avatar
+                  style={{ color: "#f56a00", backgroundColor: "#fde3cf" }}
+                >
+                  {sessionStorage.getItem("login") &&
+                    sessionStorage.getItem("login")[0]}
+                </Avatar>
+                <span> </span>
+                <b>{sessionStorage.getItem("login")}</b>
+                <span> | </span>
+                <a
+                  onClick={() => {
+                    sessionStorage.clear();
+                    window.location = "/login";
+                  }}
+                >
+                  Выйти
+                </a>
+              </>
+            )}
           </span>
         </div>
       </Header>
@@ -95,9 +117,10 @@ const LayoutPage = (props) => (
           {/* отрисовка контента */}
           {props.page === "login" ? <SignInPage /> : null}
           {props.page === "devicetable" ? <DeviceTable /> : null}
-          {props.page === "devicesearch" ? <DeviceSearch /> : null}
+          {props.page === "history" ? <History /> : null}
           {props.page === "partner" ? <Partner /> : null}
           {props.page === "partnercard" ? <PartnerCard /> : null}
+          {props.page === "devicecard" ? <DeviceCard /> : null}
         </div>
       </Content>
       <Footer
