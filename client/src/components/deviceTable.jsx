@@ -8,16 +8,18 @@ import {
   Input,
   Space,
   message,
+  Tag,
 } from "antd";
 import { PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import { copy } from "copy-to-clipboard";
-import { getDevices, removeDeviceById } from "../lib/apiReq";
+import { getDevices, getTags, removeDeviceById } from "../lib/apiReq";
 const DeviceTable = () => {
   const { Option } = Select;
   const [devices, setDevices] = useState([]);
+  const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(false);
   // Поиск по колонке
   const [searchText, setSearchText] = useState("");
@@ -130,11 +132,16 @@ const DeviceTable = () => {
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: "Ном.позиция",
-      dataIndex: "nompos",
-      ...getColumnSearchProps("nompos"),
-      key: "nompos",
-      sorter: (a, b) => a.nompos.localeCompare(b.nompos),
+      title: "Категории",
+      key: "category",
+      render: (record) => {
+        return (
+          record.category &&
+          record.category
+            .split(",")
+            .map((el) => <Tag color="orange">{idToName(el, tags)}</Tag>)
+        );
+      },
     },
     {
       title: "Поставщик",
@@ -210,6 +217,7 @@ const DeviceTable = () => {
     setLoading(false);
   };
 
+  //удаление оборудования
   const removeOneDevice = async (id) => {
     const result = await removeDeviceById(id);
     if (result.code == 3) {
@@ -221,8 +229,31 @@ const DeviceTable = () => {
     }
   };
 
+  // получить все теги (категории)
+  const getAllTags = async () => {
+    const result = await getTags();
+    if (result.code == 3) {
+      setTags(result.data);
+    } else {
+      console.log("Error: ", result.data);
+    }
+  };
+
+  // замена номеров категорий на названия
+  const idToName = (id, tags) => {
+    let temp;
+    try {
+      if (id)
+        return (temp = tags && tags.filter((el) => el.idTag == id)[0].name);
+      return "-";
+    } catch (error) {
+      console.log("Read error:", error);
+    }
+  };
+
   useEffect(() => {
     getDevicesList();
+    getAllTags();
   }, []);
 
   return (
@@ -247,20 +278,18 @@ const DeviceTable = () => {
           <div>
             <span>Категория оборудования: </span>
             <span>
-              <Select style={{ width: 200 }} defaultValue={0}>
-                <Option key={0} value={0}>
-                  Все категории
-                </Option>
-                <Option key={1} value={"Коммутаторы доступа"}>
-                  Коммутаторы доступа
-                </Option>
-                <Option key={2} value={"Коммутаторы агрегации"}>
-                  Коммутаторы агрегации
-                </Option>
-                <Option key={3} value={"Оптические модули"}>
-                  Оптические модули
-                </Option>
-              </Select>
+              {tags && (
+                <Select mode="tags" style={{ width: 200 }} defaultValue={0}>
+                  {tags.map((el) => (
+                    <>
+                      {console.log(el)}
+                      <Option key={el.idTag} value={el.idTag}>
+                        {el.name}
+                      </Option>
+                    </>
+                  ))}
+                </Select>
+              )}
             </span>
           </div>
           <Button type="primary" icon={<PlusCircleOutlined />}>

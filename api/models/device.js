@@ -6,6 +6,7 @@ const deviceSchema = new mongoose.Schema({
     nompos: { type: String, required: true },
     provider: { type: String, default: "-" },
     meter: { type: String, default: "шт" },
+    category: { type: String, default: "" },
     count: { type: String, default: 0 },
     cost: { type: String, default: 0 },
     mol: { type: String, default: "-" },

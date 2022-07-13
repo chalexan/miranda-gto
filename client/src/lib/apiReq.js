@@ -159,18 +159,43 @@ export const loginReq = async (data) => {
 
     const api = constant.serverAPI;
 
-    const response = await fetch(`${api}/login`, {
-        method: "POST",
+    try {
+        const response = await fetch(`${api}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok)
+            return { code: 1, data: `${response.status} - ${response.statusText}` };
+
+        const result = await response.json();
+        console.log('Outcoming /POST: ', result)
+        return { code: 3, data: result };
+    } catch (error) {
+        console.error('Ошибка fetch:', error);
+        return { code: 1, data: error }
+    };
+}
+
+// найти и выдать все категории
+
+export const getTags = async () => {
+
+    const api = constant.serverAPI;
+
+    const response = await fetch(`${api}/tags`, {
+        method: "GET",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
     });
     if (!response.ok)
         return { code: 1, data: `Ошибка: ${response.status} - ${response.statusText}` };
 
     const result = await response.json();
-    console.log('Outcoming /POST: ', result)
+    console.log('Incoming /GET: ', result)
     return { code: 3, data: result };
 
 }

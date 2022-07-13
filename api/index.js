@@ -6,8 +6,11 @@ const cors = require('cors');
 const Partner = require("./models/partner");
 const Device = require("./models/device")
 const User = require("./models/user")
+const Tag = require("./models/tag")
+const Operation = require('./models/operation');
 
 const { connect } = require('./connectDb');
+
 
 const port = 8080;
 const app = express()
@@ -31,6 +34,7 @@ app.post('/login', async (req, res) => {
         password,
     } = req.body;
     try {
+        console.log('Users', await User.find())
         let user = await User.findOne({
             login: username
         });
@@ -128,7 +132,7 @@ app.get('/devices', async (req, res) => {
 
     try {
         let device = await Device.find();
-        console.log(" All devices /GET");
+        console.log(" All devices /GET", device);
         res.json(device);
     } catch (e) {
         console.log('Error read from DB:', e);
@@ -172,6 +176,36 @@ app.patch('/devices', async (req, res) => {
     } catch (e) {
         console.log('Error read from DB:', e);
         res.send(`Error read from DB: ${e}`);
+    }
+})
+
+// Тест получения всех операций ->
+app.get('/operation', async (req, res) => {
+    console.log('Incoming GET ./operation')
+
+    try {
+        let operation = await Operation.find();
+        console.log(operation)
+        console.log(" All operations /GET");
+        res.json(operation);
+    } catch (e) {
+        console.log('Error read from DB:', e);
+        res.status(400).send(`Error read from DB: ${e}`);
+    }
+})
+
+// Тест получения всех категорий ->
+app.get('/tags', async (req, res) => {
+    console.log('Incoming GET ./tags')
+
+    try {
+        let tags = await Tag.find();
+        console.log(tags)
+        console.log(" All tags /GET");
+        res.json(tags);
+    } catch (e) {
+        console.log('Error read from DB:', e);
+        res.status(400).send(`Error read from DB: ${e}`);
     }
 })
 

@@ -1,9 +1,23 @@
-import { Breadcrumb, Card, message, Form, Button, Input, Space } from "antd";
+import {
+  Breadcrumb,
+  Card,
+  message,
+  Form,
+  Button,
+  Input,
+  Space,
+  Select,
+} from "antd";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { modifyDevices } from "../lib/apiReq";
+import { modifyDevices, getTags } from "../lib/apiReq";
+import { EditOutlined } from "@ant-design/icons";
 const DeviceCard = (props) => {
+  const { Option } = Select;
   const [currentDevice, setCurrentDevice] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [category, setCategory] = useState(null);
+  const [isEditTags, setIsEditTags] = useState(false);
 
   const onFinish = () => {
     const name = document.getElementById("input-name").value;
@@ -13,9 +27,13 @@ const DeviceCard = (props) => {
     const count = document.getElementById("input-count").value;
     const mol = document.getElementById("input-mol").value;
     const cost = document.getElementById("input-cost").value;
-    const category = document.getElementById("input-category").value;
     const description = document.getElementById("input-description").value;
-
+    const readyCategory = () => {
+      if (category) {
+        const filtered = category.filter((el) => el != null);
+        return filtered.join(",");
+      } else return "";
+    };
     console.log("Success:", {
       _id: currentDevice._id,
       name,
@@ -25,7 +43,7 @@ const DeviceCard = (props) => {
       count,
       mol,
       cost,
-      category,
+      category: readyCategory(),
       description,
     });
 
@@ -38,7 +56,7 @@ const DeviceCard = (props) => {
       count,
       mol,
       cost,
-      category,
+      category: readyCategory(),
       description,
     });
   };
@@ -69,8 +87,29 @@ const DeviceCard = (props) => {
     }
   };
 
+  const getAllTags = async () => {
+    const result = await getTags();
+    if (result.code == 3) {
+      console.log("Load success: ", result);
+      setTags(result.data);
+    } else {
+      console.log("Error: ", result.data);
+    }
+  };
+
+  // замена номеров категорий на названия
+  const idToName = (id, tags) => {
+    try {
+      if (id) return tags && tags.filter((el) => el.idTag == id)[0].name;
+      return "-";
+    } catch (error) {
+      console.log("Read error:", error);
+    }
+  };
+
   useEffect(() => {
     getFromLocalStorage();
+    getAllTags();
   }, []);
   return (
     <>
@@ -147,11 +186,48 @@ const DeviceCard = (props) => {
             </Form.Item>
 
             <Form.Item label="Категория" name="category">
-              {currentDevice.name && (
-                <Input
-                  id="input-category"
-                  defaultValue={currentDevice.category}
+              {currentDevice.category && (
+                <>
+                  {currentDevice.category.split(",").map((el) =>
+                    !isEditTags ? (
+                      <Space>
+                        <span key={el}>{idToName(el, tags)} </span>
+                        <span> </span>
+                      </Space>
+                    ) : null
+                  )}
+                </>
+              )}
+              {!isEditTags && (
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon={<EditOutlined />}
+                  onClick={() => setIsEditTags(true)}
                 />
+              )}
+              {isEditTags && (
+                <Select
+                  id="input-category"
+                  mode="multiple"
+                  allowClear
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Выберите из списка"
+                  defaultValue={currentDevice.category.split(",").map((el) => (
+                    <Option key={idToName(el, tags)} value={idToName(el, tags)}>
+                      {idToName(el, tags)}
+                    </Option>
+                  ))}
+                  onChange={(e) => setCategory(e)}
+                >
+                  {tags.map((el) => (
+                    <Option key={el.idTag} value={el.idTag}>
+                      {el.name}
+                    </Option>
+                  ))}
+                </Select>
               )}
             </Form.Item>
 
