@@ -179,6 +179,81 @@ app.patch('/devices', async (req, res) => {
     }
 })
 
+// Тест добавления поставщика ->
+app.post('/partner', async (req, res) => {
+    console.log('Incoming POST ./partner ->', req.body)
+    let {
+        company,
+        person,
+        email,
+        phone,
+    } = req.body;
+    const newID = nanoid()
+    console.log('Generated newID ->', newID);
+    try {
+        let partner = await Partner.create({
+            id: newID,
+            company: company,
+            person: person,
+            email: email,
+            phone: phone,
+        });
+
+        await partner.save();
+        console.log(" New Partner ->", partner);
+        res.json(partner);
+    } catch (e) {
+        console.log('Error write to DB:', e);
+        res.send(`Error write to DB: ${e}`);
+    }
+})
+
+// Тест получения всех поставщиков ->
+app.get('/partner', async (req, res) => {
+    console.log('Incoming GET ./partner')
+
+    try {
+        let partner = await Partner.find();
+        console.log(" All parnters ->", partner);
+        res.json(partner);
+    } catch (e) {
+        console.log('Error read from DB:', e);
+        res.send(`Error read from DB: ${e}`);
+    }
+})
+
+// Тест добавления одного устройства ->
+app.post('/device', async (req, res) => {
+    console.log('Incoming POST ./device ->', req.body)
+    let {
+        name,
+        nompos,
+        provider,
+        meter,
+        category,
+        count,
+        mol
+    } = req.body;
+
+    try {
+        let device = await Device.create({
+            name,
+            nompos,
+            provider,
+            meter,
+            count,
+            category: category ? category.join(',') : '',
+            mol
+        });
+        await device.save();
+        console.log("New Device ->", device);
+        res.json(device);
+    } catch (e) {
+        console.log('Error write to DB:', e);
+        res.send(`Error write to DB: ${e}`);
+    }
+})
+
 // Тест получения всех операций ->
 app.get('/operation', async (req, res) => {
     console.log('Incoming GET ./operation')

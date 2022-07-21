@@ -15,7 +15,7 @@ const devicesBase = [
         "count": 35,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "025.9000.0432",
@@ -26,7 +26,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "025.9000.0441",
@@ -37,7 +37,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "025.9000.0535",
@@ -48,7 +48,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "034.6440.0591",
@@ -59,7 +59,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "034.6888.0485",
@@ -70,7 +70,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "035.7800.7912",
@@ -81,7 +81,7 @@ const devicesBase = [
         "count": 6,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "035.7800.8855",
@@ -92,7 +92,7 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.7310.5688",
@@ -103,7 +103,7 @@ const devicesBase = [
         "count": 10,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.7330.0739",
@@ -114,7 +114,7 @@ const devicesBase = [
         "count": 3,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.7730.0127",
@@ -125,7 +125,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.8300.0296",
@@ -136,7 +136,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.8300.0297",
@@ -147,7 +147,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.8400.0068",
@@ -158,7 +158,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.9200.1631",
@@ -169,7 +169,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.9200.2186",
@@ -180,7 +180,7 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.9200.2287",
@@ -191,7 +191,7 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.9200.A091",
@@ -202,7 +202,7 @@ const devicesBase = [
         "count": 400,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.9300.0351",
@@ -213,7 +213,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.9300.0488",
@@ -224,7 +224,7 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "066.9300.0638",
@@ -235,7 +235,7 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "073.9930.0268",
@@ -246,7 +246,7 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "081.2200.0159",
@@ -257,7 +257,7 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "081.7000.0098",
@@ -268,7 +268,7 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "082.0000.0128",
@@ -279,7 +279,7 @@ const devicesBase = [
         "count": 3,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "085.7000.0449",
@@ -290,7 +290,7 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "085.7000.0899",
@@ -301,7 +301,7 @@ const devicesBase = [
         "count": 5,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "085.7000.0899",
@@ -312,7 +312,7 @@ const devicesBase = [
         "count": 10,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "085.7000.0899",
@@ -323,7 +323,7 @@ const devicesBase = [
         "count": 20,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
     {
         "nompos": "085.7000.1565",
@@ -334,7 +334,7 @@ const devicesBase = [
         "count": 5,
         "category": "",
         "description": "",
-        "provider": ""
+
     },
 ]
 

@@ -153,7 +153,7 @@ export const removeDeviceById = async (idDevice) => {
 
 }
 
-// добавить нового партнера
+// залогиниться
 
 export const loginReq = async (data) => {
 
@@ -196,6 +196,49 @@ export const getTags = async () => {
 
     const result = await response.json();
     console.log('Incoming /GET: ', result)
+    return { code: 3, data: result };
+
+}
+
+// найти и выдать все категории
+
+export const getOperation = async () => {
+
+    const api = constant.serverAPI;
+
+    const response = await fetch(`${api}/operation`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!response.ok)
+        return { code: 1, data: `Ошибка: ${response.status} - ${response.statusText}` };
+
+    const result = await response.json();
+    console.log('Incoming /GET: ', result)
+    return { code: 3, data: result };
+
+}
+
+// добавить новое оборудование
+
+export const saveNewDevice = async (data) => {
+
+    const api = constant.serverAPI;
+
+    const response = await fetch(`${api}/device`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok)
+        return { code: 1, data: `Ошибка: ${response.status} - ${response.statusText}` };
+
+    const result = await response.json();
+    console.log('034: Outcoming /POST: ', result)
     return { code: 3, data: result };
 
 }

@@ -9,18 +9,26 @@ import {
   Space,
   message,
   Tag,
+  Modal,
+  Form,
 } from "antd";
 import { PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
-import { copy } from "copy-to-clipboard";
-import { getDevices, getTags, removeDeviceById } from "../lib/apiReq";
+import {
+  getDevices,
+  getTags,
+  removeDeviceById,
+  saveNewDevice,
+} from "../lib/apiReq";
 const DeviceTable = () => {
   const { Option } = Select;
   const [devices, setDevices] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [newDeviceModalVis, setNewDeviceModalVis] = useState(false);
+
   // Поиск по колонке
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -111,7 +119,6 @@ const DeviceTable = () => {
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
@@ -120,7 +127,6 @@ const DeviceTable = () => {
     clearFilters();
     setSearchText("");
   };
-
   // Конец поиска по колонке
 
   const columns = [
@@ -144,18 +150,18 @@ const DeviceTable = () => {
       },
     },
     {
-      title: "Поставщик",
+      title: "Производитель",
       dataIndex: "provider",
       ...getColumnSearchProps("provider"),
       key: "provider",
       sorter: (a, b) => a.provider.localeCompare(b.provider),
     },
-    {
-      title: "Ед. изм",
-      dataIndex: "meter",
-      key: "meter",
-      sorter: (a, b) => a.meter.localeCompare(b.meter),
-    },
+    // {
+    //   title: "Ед. изм",
+    //   dataIndex: "meter",
+    //   key: "meter",
+    //   sorter: (a, b) => a.meter.localeCompare(b.meter),
+    // },
     {
       title: "Количество",
       dataIndex: "count",
@@ -176,16 +182,7 @@ const DeviceTable = () => {
         <>
           <a
             onClick={() => {
-              localStorage.setItem("idDevice", record._id);
-              localStorage.setItem("nameDevice", record.name);
-              localStorage.setItem("nomposDevice", record.nompos);
-              localStorage.setItem("providerDevice", record.provider);
-              localStorage.setItem("meterDevice", record.meter);
-              localStorage.setItem("countDevice", record.count);
-              localStorage.setItem("molDevice", record.mol);
-              localStorage.setItem("costDevice", record.cost);
-              localStorage.setItem("categoryDevice", record.category);
-              localStorage.setItem("descriptionDevice", record.description);
+              saveToLocalStorage(record);
             }}
           >
             <Link to={`/device/${record._id}`}>Редактировать</Link>
@@ -194,7 +191,7 @@ const DeviceTable = () => {
           <a
             onClick={() => {
               removeOneDevice(record._id);
-              window.location.reload();
+              getDevicesList();
             }}
           >
             Удалить
@@ -205,6 +202,7 @@ const DeviceTable = () => {
     },
   ];
 
+  //получить список устройств
   const getDevicesList = async () => {
     setLoading(true);
     const result = await getDevices();
@@ -229,7 +227,7 @@ const DeviceTable = () => {
     }
   };
 
-  // получить все теги (категории)
+  //получить все теги (категории)
   const getAllTags = async () => {
     const result = await getTags();
     if (result.code == 3) {
@@ -239,7 +237,7 @@ const DeviceTable = () => {
     }
   };
 
-  // замена номеров категорий на названия
+  //замена номеров категорий на названия
   const idToName = (id, tags) => {
     let temp;
     try {
@@ -251,10 +249,53 @@ const DeviceTable = () => {
     }
   };
 
+  //сохранение в локальном хранилище
+  const saveToLocalStorage = (rec) => {
+    const {
+      _id,
+      name,
+      nompos,
+      provider,
+      meter,
+      count,
+      mol,
+      cost,
+      category,
+      description,
+    } = rec;
+    const currentDevice = [
+      { fieldName: "idDevice", fieldValue: _id },
+      { fieldName: "nameDevice", fieldValue: name },
+      { fieldName: "nomposDevice", fieldValue: nompos },
+      { fieldName: "providerDevice", fieldValue: provider },
+      { fieldName: "meterDevice", fieldValue: meter },
+      { fieldName: "countDevice", fieldValue: count },
+      { fieldName: "molDevice", fieldValue: mol },
+      { fieldName: "costDevice", fieldValue: cost },
+      { fieldName: "categoryDevice", fieldValue: category },
+      { fieldName: "descriptionDevice", fieldValue: description },
+    ];
+    return currentDevice.map((device) =>
+      localStorage.setItem(device.fieldName, device.fieldValue)
+    );
+  };
+
   useEffect(() => {
     getDevicesList();
     getAllTags();
   }, []);
+
+  const onFinish = async (values) => {
+    console.log("Success:", values);
+    await saveNewDevice(values);
+    setNewDeviceModalVis(false);
+    return await getDevicesList();
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+    setNewDeviceModalVis(false);
+  };
 
   return (
     <>
@@ -292,15 +333,114 @@ const DeviceTable = () => {
               )}
             </span>
           </div>
-          <Button type="primary" icon={<PlusCircleOutlined />}>
+          <Button
+            type="primary"
+            onClick={() => setNewDeviceModalVis(true)}
+            icon={<PlusCircleOutlined />}
+          >
             Добавить
           </Button>
         </div>
         <Divider />
         <b>Всего номенклатур: {devices && devices.length}</b>
         <br />
-        <Table columns={columns} dataSource={devices} />
+        <Table columns={columns} dataSource={devices.reverse()} />
       </Card>
+
+      {/* Add device modal window */}
+
+      <Modal
+        visible={newDeviceModalVis}
+        title="Добавить оборудование"
+        footer={[]}
+        onCancel={() => setNewDeviceModalVis(false)}
+        onOk={() => setNewDeviceModalVis(false)}
+      >
+        <Card>
+          <Form
+            name="basic"
+            labelCol={{
+              span: 8,
+            }}
+            wrapperCol={{
+              span: 16,
+            }}
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="Наименование"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Введите название оборудования!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item label="Номенклатура" name="namepos">
+              <Input defaultValue="0000-000" />
+            </Form.Item>
+
+            <Form.Item label="Производитель" name="provider">
+              <Input />
+            </Form.Item>
+
+            <Form.Item label="Категория" name="category">
+              <Select
+                id="input-category"
+                mode="multiple"
+                allowClear
+                style={{
+                  width: "100%",
+                }}
+                placeholder="Выберите из списка"
+                // onChange={(e) => setCategory(e)}
+              >
+                {tags.map((el) => (
+                  <Option key={el.idTag} value={el.idTag}>
+                    {el.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item label="Количество" name="count">
+              <Input defaultValue={0} />
+            </Form.Item>
+
+            <Form.Item label="Единица измерения" name="meter">
+              <Input defaultValue="шт" />
+            </Form.Item>
+
+            <Form.Item label="МОЛ" name="mol">
+              <Input />
+            </Form.Item>
+
+            <Form.Item label="Цена" name="cost">
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 8,
+                span: 16,
+              }}
+            >
+              <Button type="primary" htmlType="submit">
+                Сохранить
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Modal>
     </>
   );
 };

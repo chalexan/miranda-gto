@@ -32,7 +32,7 @@ const DeviceCard = (props) => {
       if (category) {
         const filtered = category.filter((el) => el != null);
         return filtered.join(",");
-      } else return "";
+      } else return currentDevice.category ? currentDevice.category : -1;
     };
     console.log("Success:", {
       _id: currentDevice._id,
@@ -152,7 +152,7 @@ const DeviceCard = (props) => {
               )}
             </Form.Item>
 
-            <Form.Item label="Поставщик" name="provider">
+            <Form.Item label="Производитель" name="provider">
               {currentDevice.name && (
                 <Input
                   id="input-provider"
