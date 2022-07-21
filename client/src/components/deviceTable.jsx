@@ -12,7 +12,11 @@ import {
   Modal,
   Form,
 } from "antd";
-import { PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  PlusCircleOutlined,
+  SearchOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
@@ -24,10 +28,12 @@ import {
 } from "../lib/apiReq";
 const DeviceTable = () => {
   const { Option } = Select;
+
   const [devices, setDevices] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newDeviceModalVis, setNewDeviceModalVis] = useState(false);
+  const [searchedTags, setSearchedTags] = useState([]);
 
   // Поиск по колонке
   const [searchText, setSearchText] = useState("");
@@ -280,6 +286,18 @@ const DeviceTable = () => {
     );
   };
 
+  //поиск по категориям (тегам)
+  const searchByTags = (tagsArray, devices) => {
+    if (tagsArray.length === 0)
+      return console.log("Search request [tags] finish - error: no tags");
+    const filtered = devices.filter((device) =>
+      tagsArray
+        .map((el) => String(el))
+        .every((ai) => device.category.split(",").includes(ai))
+    );
+    return filtered;
+  };
+
   useEffect(() => {
     getDevicesList();
     getAllTags();
@@ -320,7 +338,11 @@ const DeviceTable = () => {
             <span>Категория оборудования: </span>
             <span>
               {tags && (
-                <Select mode="tags" style={{ width: 200 }} defaultValue={0}>
+                <Select
+                  mode="tags"
+                  onChange={(e) => setSearchedTags(e)}
+                  style={{ width: 200 }}
+                >
                   {tags.map((el) => (
                     <>
                       {console.log(el)}
@@ -332,6 +354,18 @@ const DeviceTable = () => {
                 </Select>
               )}
             </span>
+            <span> </span>
+            <Button
+              type="primary"
+              icon={<SearchOutlined />}
+              onClick={() => setDevices(searchByTags(searchedTags, devices))}
+            />
+            <span> </span>
+            <Button
+              type="primary"
+              icon={<DeleteOutlined />}
+              onClick={() => getDevicesList()}
+            />
           </div>
           <Button
             type="primary"

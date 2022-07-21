@@ -6,9 +6,6 @@ const History = () => {
       <Breadcrumb>
         <Breadcrumb.Item>Миранда-медиа</Breadcrumb.Item>
         <Breadcrumb.Item>ГТО</Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/device/table">Склад</Link>
-        </Breadcrumb.Item>
         <Breadcrumb.Item>История</Breadcrumb.Item>
       </Breadcrumb>
       <br />
