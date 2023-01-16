@@ -32,3 +32,14 @@ code {
   margin-top: 10px;
   margin-bottom: auto;
   margin-right: auto }
+
+  .color-red{
+    color: red; 
+  }
+  .color-green {
+     color :green; 
+  }
+  .color-yellow {
+    color :green; 
+ }
+  

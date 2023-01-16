@@ -1,6 +1,6 @@
 import { Breadcrumb, Card, message } from "antd";
 import { Button, Checkbox, Form, Input } from "antd";
-import { loginReq } from "../lib/apiReq";
+import { loginReq, saveToHistory } from "../lib/apiReq";
 
 const SignInPage = () => {
   const onFinish = async (values) => {
@@ -15,7 +15,12 @@ const SignInPage = () => {
       await message.info("Открываем систему. Переадресация.");
       sessionStorage.setItem("isLogin", true);
       sessionStorage.setItem("login", data.login);
-      window.location = "/";
+      saveToHistory({
+        user: data.login,
+        description: "Выполнен вход в систему",
+        operation: 3,
+      });
+      window.location = "/transfer";
     }
     return 0;
   };

@@ -18,6 +18,10 @@ root.render(
       <Route path="/partner/:id" element={<LayoutPage page="partnercard" />} />
       <Route path="/device/:id" element={<LayoutPage page="devicecard" />} />
       <Route path="/device/table" element={sessionStorage.getItem("isLogin") ? <LayoutPage page="devicetable" /> : <LayoutPage page="login" />} />
+      <Route path="/document" element={sessionStorage.getItem("isLogin") ? <LayoutPage page="documenttable" /> : <LayoutPage page="login" />} />
+      <Route path="/purchase" element={sessionStorage.getItem("isLogin") ? <LayoutPage page="giveawaytable" /> : <LayoutPage page="login" />} />
+      <Route path="/receive" element={sessionStorage.getItem("isLogin") ? <LayoutPage page="orderdevicetable" /> : <LayoutPage page="login" />} />
+      <Route path="/transfer" element={sessionStorage.getItem("isLogin") ? <LayoutPage page="transfer" /> : <LayoutPage page="login" />} />
       <Route path="/history" element={sessionStorage.getItem("isLogin") ? <LayoutPage page="history" /> : <LayoutPage page="login" />} /> :
       <Route path="/login" element={<LayoutPage page="login" />} />
     </Routes>

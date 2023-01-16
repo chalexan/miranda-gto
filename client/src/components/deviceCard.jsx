@@ -27,6 +27,8 @@ const DeviceCard = (props) => {
     const count = document.getElementById("input-count").value;
     const mol = document.getElementById("input-mol").value;
     const cost = document.getElementById("input-cost").value;
+    const storageName = document.getElementById("input-storageName").value;
+    const storagePlace = document.getElementById("input-storagePlace").value;
     const description = document.getElementById("input-description").value;
     const readyCategory = () => {
       if (category) {
@@ -42,6 +44,8 @@ const DeviceCard = (props) => {
       meter,
       count,
       mol,
+      storageName,
+      storagePlace,
       cost,
       category: readyCategory(),
       description,
@@ -56,6 +60,8 @@ const DeviceCard = (props) => {
       count,
       mol,
       cost,
+      storageName,
+      storagePlace,
       category: readyCategory(),
       description,
     });
@@ -69,6 +75,8 @@ const DeviceCard = (props) => {
       meter: localStorage.getItem("meterDevice"),
       count: localStorage.getItem("countDevice"),
       mol: localStorage.getItem("molDevice"),
+      storageName: localStorage.getItem("storageNameDevice"),
+      storagePlace: localStorage.getItem("storagePlaceDevice"),
       cost: localStorage.getItem("costDevice"),
       category: localStorage.getItem("categoryDevice"),
       description: localStorage.getItem("descriptionDevice"),
@@ -173,6 +181,46 @@ const DeviceCard = (props) => {
               )}
             </Form.Item>
 
+            <Form.Item label="Cклад" name="storageName">
+              {currentDevice.cost && (
+                <Select
+                  onChange={(e) =>
+                    (document.getElementById("input-storageName").value = e)
+                  }
+                  id="select-storageName"
+                  defaultValue={currentDevice.storageName}
+                >
+                  <Option key="0" value="Склад-2">
+                    Склад-2
+                  </Option>
+                  <Option key="1" value="Склад-3">
+                    Склад-3
+                  </Option>
+                  <Option key="2" value="Фонтаны">
+                    Фонтаны
+                  </Option>
+                  <Option key="3" value="Касьянов Сергей">
+                    Касьянов Сергей
+                  </Option>
+                  <Option key="4" value="Кабинет">
+                    Кабинет
+                  </Option>
+                  <Option key="5" value="Другое">
+                    Другое
+                  </Option>
+                </Select>
+              )}
+            </Form.Item>
+
+            <Form.Item label="Место" name="storagePlace">
+              {currentDevice.cost && (
+                <Input
+                  id="input-storagePlace"
+                  defaultValue={currentDevice.storagePlace}
+                />
+              )}
+            </Form.Item>
+
             <Form.Item label="МОЛ" name="mol">
               {currentDevice.mol && (
                 <Input id="input-mol" defaultValue={currentDevice.mol} />
@@ -239,7 +287,11 @@ const DeviceCard = (props) => {
                 />
               )}
             </Form.Item>
-
+            <Input
+              id="input-storageName"
+              style={{ visibility: "hidden" }}
+              defaultValue={currentDevice.storageName}
+            />
             <Form.Item
               wrapperCol={{
                 offset: 8,

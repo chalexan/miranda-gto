@@ -242,3 +242,88 @@ export const saveNewDevice = async (data) => {
     return { code: 3, data: result };
 
 }
+
+// сохранить в истории
+
+export const saveToHistory = async (data) => {
+
+    const api = constant.serverAPI;
+
+    const response = await fetch(`${api}/history`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok)
+        return { code: 1, data: `Ошибка: ${response.status} - ${response.statusText}` };
+
+    const result = await response.json();
+    console.log('034: Outcoming /POST: ', result)
+    return { code: 3, data: result };
+
+}
+
+// найти и выдать история
+
+export const getHistory = async () => {
+
+    const api = constant.serverAPI;
+
+    const response = await fetch(`${api}/history`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!response.ok)
+        return { code: 1, data: `Ошибка: ${response.status} - ${response.statusText}` };
+
+    const result = await response.json();
+    console.log('Incoming /GET: ', result)
+    return { code: 3, data: result };
+
+}
+
+// выдача оборудования - через сущность giveAway
+export const purchaseGiveAway = async (data) => {
+
+    const api = constant.serverAPI;
+
+    const response = await fetch(`${api}/purchase`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok)
+        return { code: 1, data: `Ошибка: ${response.status} - ${response.statusText}` };
+
+    const result = await response.json();
+    console.log('034: Outcoming /POST: ', result)
+    return { code: 3, data: result };
+
+}
+
+// проверка сервера
+export const checkServer = async () => {
+    const api = constant.serverAPI;
+    try {
+        const response = await fetch(`${api}/status`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const result = await response.statusText;
+        console.log('Incoming status: ', result)
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+
+
+}

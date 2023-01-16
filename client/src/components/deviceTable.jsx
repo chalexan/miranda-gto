@@ -155,13 +155,13 @@ const DeviceTable = () => {
         );
       },
     },
-    {
-      title: "Производитель",
-      dataIndex: "provider",
-      ...getColumnSearchProps("provider"),
-      key: "provider",
-      sorter: (a, b) => a.provider.localeCompare(b.provider),
-    },
+    // {
+    //   title: "Производитель",
+    //   dataIndex: "provider",
+    //   ...getColumnSearchProps("provider"),
+    //   key: "provider",
+    //   sorter: (a, b) => a.provider.localeCompare(b.provider),
+    // },
     // {
     //   title: "Ед. изм",
     //   dataIndex: "meter",
@@ -169,18 +169,23 @@ const DeviceTable = () => {
     //   sorter: (a, b) => a.meter.localeCompare(b.meter),
     // },
     {
-      title: "Количество",
+      title: "Кол-во",
       dataIndex: "count",
       key: "count",
       sorter: (a, b) => a.count - b.count,
     },
     {
-      title: "Цена",
-      dataIndex: "cost",
-      key: "cost",
+      title: "Склад",
+      dataIndex: "storageName",
+      key: "storageName",
       sorter: (a, b) => a.cost.localeCompare(b.cost),
     },
-
+    {
+      title: "Место",
+      dataIndex: "storagePlace",
+      key: "storagePlace",
+      sorter: (a, b) => a.cost.localeCompare(b.cost),
+    },
     {
       title: "Действие",
       key: "more",
@@ -268,6 +273,8 @@ const DeviceTable = () => {
       cost,
       category,
       description,
+      storageName,
+      storagePlace,
     } = rec;
     const currentDevice = [
       { fieldName: "idDevice", fieldValue: _id },
@@ -280,6 +287,8 @@ const DeviceTable = () => {
       { fieldName: "costDevice", fieldValue: cost },
       { fieldName: "categoryDevice", fieldValue: category },
       { fieldName: "descriptionDevice", fieldValue: description },
+      { fieldName: "storageNameDevice", fieldValue: storageName },
+      { fieldName: "storagePlaceDevice", fieldValue: storagePlace },
     ];
     return currentDevice.map((device) =>
       localStorage.setItem(device.fieldName, device.fieldValue)
@@ -421,6 +430,14 @@ const DeviceTable = () => {
 
             <Form.Item label="Номенклатура" name="namepos">
               <Input defaultValue="0000-000" />
+            </Form.Item>
+
+            <Form.Item label="Cклад" name="storageName">
+              <Input defaultValue="Склад-2" />
+            </Form.Item>
+
+            <Form.Item label="Место" name="storagePlace">
+              <Input defaultValue="" />
             </Form.Item>
 
             <Form.Item label="Производитель" name="provider">

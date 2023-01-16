@@ -10,12 +10,7 @@ import {
   message,
 } from "antd";
 import { Link } from "react-router-dom";
-import {
-  PlusCircleOutlined,
-  CaretDownOutlined,
-  CaretRightOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { PlusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import copy from "copy-to-clipboard";
 import { getPartners, savePartners, removePartnersById } from "../lib/apiReq";

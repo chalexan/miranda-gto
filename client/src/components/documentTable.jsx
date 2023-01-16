@@ -1,4 +1,5 @@
 // список документов - в работе от 15 июля
+// срочно закончить до 8 июля
 
 import {
   Breadcrumb,
@@ -18,7 +19,7 @@ import copy from "copy-to-clipboard";
 import { getPartners, removePartnersById } from "../lib/apiReq";
 import { useEffect, useState } from "react";
 
-const documentTable = () => {
+const DocumentTable = () => {
   const [newDeviceModalVis, setNewDeviceModalVis] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -126,117 +127,79 @@ const documentTable = () => {
 
   const onFinish = (values) => {
     console.log("Success:", values);
-    saveNewPartner(values);
-    setNewDeviceModalVis(false);
+    // saveNewPartner(values);
+    // setNewDeviceModalVis(false);
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
-    setNewDeviceModalVis(false);
+    // setNewDeviceModalVis(false);
   };
 
-  const getPartnersList = async () => {
-    setLoading(true);
-    const result = await getPartners();
-    if (result.code == 3) {
-      console.log("Load success: ", result);
-      setDocuments(result.data);
-    } else {
-      console.log("Error: ", result.data);
-    }
-    setLoading(false);
+  const getDocumentList = async () => {
+    // setLoading(true);
+    // const result = await getPartners();
+    // if (result.code == 3) {
+    //   console.log("Load success: ", result);
+    //   setDocuments(result.data);
+    // } else {
+    //   console.log("Error: ", result.data);
+    // }
+    // setLoading(false);
   };
 
-  const saveNewPartner = async (data) => {
-    await savePartners(data);
-    return await getPartnersList();
+  const saveNewDocument = async (data) => {
+    // await savePartners(data);
+    // return await getPartnersList();
   };
 
-  const removeOnePartner = async (id) => {
-    const result = await removePartnersById(id);
-    if (result.code == 3) {
-      console.log("Delete success: ", result);
-      message.info("Удаление успешно проведено");
-    } else {
-      console.log("Error: ", result.data);
-      message.info(`Ошибка удаления: ${result.data}`);
-    }
+  const removeOneDocument = async (id) => {
+    // const result = await removePartnersById(id);
+    // if (result.code == 3) {
+    //   console.log("Delete success: ", result);
+    //   message.info("Удаление успешно проведено");
+    // } else {
+    //   console.log("Error: ", result.data);
+    //   message.info(`Ошибка удаления: ${result.data}`);
+    // }
   };
 
   useEffect(() => {
-    getPartnersList();
+    getDocumentList();
   }, []);
 
   const columns = [
     {
-      title: "Компания",
+      title: "Создатель",
       dataIndex: "company",
       ...getColumnSearchProps("company"),
       key: "company",
       sorter: (a, b) => a.company.localeCompare(b.company),
     },
     {
-      title: "Контактное лицо",
+      title: "Название",
       dataIndex: "person",
       ...getColumnSearchProps("person"),
       key: "person",
       sorter: (a, b) => a.person.localeCompare(b.person),
     },
     {
-      title: "E-mail",
+      title: "Ссылка на файл",
       dataIndex: "email",
       ...getColumnSearchProps("email"),
       key: "provider",
       sorter: (a, b) => a.email.localeCompare(b.email),
     },
     {
-      title: "Телефон",
+      title: "Связано с",
       dataIndex: "phone",
       ...getColumnSearchProps("phone"),
       key: "meter",
       sorter: (a, b) => a.phone.localeCompare(b.phone),
     },
     {
-      title: "Действие",
+      title: "Примечание",
       key: "more",
-      render: (record) => (
-        <>
-          <a
-            onClick={() => {
-              localStorage.setItem("idPartner", record.id);
-              localStorage.setItem("personPartner", record.person);
-              localStorage.setItem("companyPartner", record.company);
-              localStorage.setItem("emailPartner", record.email);
-              localStorage.setItem("phonePartner", record.phone);
-              localStorage.setItem(
-                "descriptionPartner",
-                String(record.description) ? String(record.description) : "-"
-              );
-            }}
-          >
-            <Link to={`/partner/${record.id}`}>Редактировать</Link>
-          </a>
-          <br />
-          <a
-            onClick={() => {
-              copy(`${record.company} \n ${record.email}`);
-              message.info("Контакты скопированы");
-            }}
-          >
-            Скопировать
-          </a>
-          <br />
-          <a
-            onClick={() => {
-              removeOnePartner(record.id);
-              getPartnersList();
-            }}
-          >
-            Удалить
-          </a>
-        </>
-      ),
-      fixed: "right",
     },
   ];
 
@@ -259,7 +222,7 @@ const documentTable = () => {
             >
               Добавить
             </Button>
-            <a onClick={() => getPartnersList()}>Обновить таблицу</a>
+            <a onClick={() => getDocumentList()}>Обновить таблицу</a>
           </Space>
         }
         title="Документы и файлы"
@@ -343,4 +306,4 @@ const documentTable = () => {
   );
 };
 
-export default documentTable;
+export default DocumentTable;
