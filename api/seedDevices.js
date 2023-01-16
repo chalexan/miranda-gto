@@ -15,12 +15,16 @@ const devicesBase = [
         "count": 35,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
 
     },
     {
         "nompos": "025.9000.0432",
         "name": "Сапоги рабочие резина р. 44 мужские",
         "mol": "Кострикова Анна Евгеньевна",
+        "storageName": "testStorage",
+        "storagePlace": "testPlace",
         "cost": 415,
         "meter": "пар",
         "count": 1,
@@ -37,6 +41,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -48,6 +55,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -59,6 +69,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -70,6 +83,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -81,6 +97,9 @@ const devicesBase = [
         "count": 6,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -92,6 +111,9 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -103,6 +125,9 @@ const devicesBase = [
         "count": 10,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -114,6 +139,9 @@ const devicesBase = [
         "count": 3,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -125,6 +153,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -136,6 +167,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -147,6 +181,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -158,6 +195,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -169,6 +209,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -180,6 +223,9 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -191,6 +237,9 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -202,6 +251,9 @@ const devicesBase = [
         "count": 400,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -213,6 +265,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -224,6 +279,9 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -235,6 +293,9 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -246,6 +307,9 @@ const devicesBase = [
         "count": 1,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -257,6 +321,9 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -268,6 +335,9 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -279,6 +349,9 @@ const devicesBase = [
         "count": 3,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -290,6 +363,9 @@ const devicesBase = [
         "count": 2,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -301,6 +377,9 @@ const devicesBase = [
         "count": 5,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -312,6 +391,9 @@ const devicesBase = [
         "count": 10,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -323,6 +405,9 @@ const devicesBase = [
         "count": 20,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
     {
@@ -334,6 +419,9 @@ const devicesBase = [
         "count": 5,
         "category": "",
         "description": "",
+        "storageName": "",
+        "storagePlace": "",
+
 
     },
 ]

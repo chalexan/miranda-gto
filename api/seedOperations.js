@@ -20,11 +20,19 @@ const operation = [
     },
     {
         "idOperation": 3,
-        "name": "Удаление"
+        "name": "Вход пользователя"
     },
     {
         "idOperation": 4,
-        "name": "Удаление"
+        "name": "Выход пользователя"
+    },
+    {
+        "idOperation": 5,
+        "name": "Выдача со склада"
+    },
+    {
+        "idOperation": 6,
+        "name": "Поступление на склад"
     },
 ]
 

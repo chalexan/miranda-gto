@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const request = require('request');
 const { nanoid } = require("nanoid");
 const path = require('path');
 const md5 = require('md5')
@@ -8,10 +9,14 @@ const Device = require("./models/device")
 const User = require("./models/user")
 const Tag = require("./models/tag")
 const Operation = require('./models/operation');
+const History = require('./models/history');
+const GiveAway = require('./models/giveAway');
 
 const { connect } = require('./connectDb');
+const { setEnvironmentData } = require('worker_threads');
 
 
+const localIP = Object.values(require('os').networkInterfaces()).reduce((r, list) => r.concat(list.reduce((rr, i) => rr.concat(i.family === 'IPv4' && !i.internal && i.address || []), [])), [])
 const port = 8080;
 const app = express()
 
@@ -34,11 +39,11 @@ app.post('/login', async (req, res) => {
         password,
     } = req.body;
     try {
-        console.log('Users', await User.find())
+        // console.log('Users', await User.find())
         let user = await User.findOne({
             login: username
         });
-        console.log(await User.find(), user)
+        // console.log(await User.find(), user)
         if (!user) return res.status(401).send("Unautorized")
         if (md5(password) !== user.password) return res.status(401).send("Unautorized")
         console.log(" User autorized! ->", user);
@@ -84,7 +89,7 @@ app.get('/partner', async (req, res) => {
 
     try {
         let partner = await Partner.find();
-        console.log(" All parnters ->", partner);
+        //  console.log(" All parnters ->", partner);
         res.json(partner);
     } catch (e) {
         console.log('Error read from DB:', e);
@@ -118,7 +123,7 @@ app.patch('/partner', async (req, res) => {
         doc.phone = currentPartner.phone;
         doc.description = currentPartner.description;
         await doc.save();
-        console.log("Save partner ->", currentPartner);
+        //  console.log("Save partner ->", currentPartner);
         res.json(currentPartner);
     } catch (e) {
         console.log('Error read from DB:', e);
@@ -132,7 +137,7 @@ app.get('/devices', async (req, res) => {
 
     try {
         let device = await Device.find();
-        console.log(" All devices /GET", device);
+        //  console.log(" All devices /GET", device);
         res.json(device);
     } catch (e) {
         console.log('Error read from DB:', e);
@@ -170,6 +175,8 @@ app.patch('/devices', async (req, res) => {
         doc.cost = currentDevice.cost;
         doc.category = currentDevice.category;
         doc.description = currentDevice.description;
+        doc.storageName = currentDevice.storageName;
+        doc.storagePlace = currentDevice.storagePlace;
         await doc.save();
         console.log("Save device ->", currentDevice);
         res.json(currentDevice);
@@ -275,7 +282,7 @@ app.get('/tags', async (req, res) => {
 
     try {
         let tags = await Tag.find();
-        console.log(tags)
+        // console.log(tags)
         console.log(" All tags /GET");
         res.json(tags);
     } catch (e) {
@@ -283,6 +290,91 @@ app.get('/tags', async (req, res) => {
         res.status(400).send(`Error read from DB: ${e}`);
     }
 })
+
+// Тест сохранить в истории ->
+app.post('/history', async (req, res) => {
+    console.log('Incoming POST ./history ->', req.body)
+
+    let {
+        description,
+        user,
+        operation,
+    } = req.body;
+    var operationText = await Operation.find({ idOperation: operation });
+
+    try {
+        let history = await History.create({
+            description: description + " // Client: " + req.headers['user-agent'] + " // IP: " + req.ip,
+            user,
+            operation: operationText[0].name,
+        });
+        await history.save();
+        console.log(" New History data ->", history);
+        res.json(history);
+    } catch (e) {
+        console.log('Error write to DB:', e);
+        res.send(`Error write to DB: ${e}`);
+    }
+})
+
+// Тест получения всей истории ->
+app.get('/history', async (req, res) => {
+    console.log('Incoming GET ./tags')
+
+    try {
+        let history = await History.find();
+        console.log(" All history /GET");
+        return res.status(200).json(history);
+    } catch (e) {
+        console.log('Error read from DB:', e);
+        return res.status(400).send(`Error read from DB: ${e}`);
+    }
+})
+
+// Тест процесс "выдача оборудования"
+app.post('/purchase', async (req, res) => {
+    try {
+        const giveAway = await GiveAway.create(req.body);
+        console.log("New Purchase ->", giveAway);
+        const timePurchse = giveAway.createdAt;
+        res.json(giveAway);
+
+        //выдать со склада (вычесть из остатков что выдано было) - проверка
+        const purchaseDevices = await giveAway.purchase;
+        for (let i = 0; i < purchaseDevices.length; i += 1) {
+            await Device.findOneAndUpdate({ "_id": purchaseDevices[i].idDevice },
+                { "$inc": { "count": -purchaseDevices[i].count } })
+        }
+
+        // записать в историю
+        request.post({
+            url: `http://${localIP}:${port}/history`,
+            body: {
+                user: req.body.values.nameUser,
+                description: `Выдача оборудования ${req.body.values.recepientName} от ${timePurchse.toLocaleString()}\n
+                Описание: ${req.body.values.description}`,
+                operation: 5,
+            },
+
+            json: true
+        })
+
+
+
+        //создать документ
+
+
+    } catch (e) {
+        console.log('Error write to DB:', e);
+        res.send(`Error write to DB: ${e}`);
+    }
+
+})
+
+// Тест жив ли сервер ->
+app.get('/status', (req, res) => res.sendStatus(200));
+
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
